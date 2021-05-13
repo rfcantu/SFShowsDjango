@@ -1,18 +1,31 @@
-from django.http import Http404
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.views import generic
 
-from .models import Venue
+from .models import Venue, Show
 # Create your views here.
 
-# Creating a view for 404 response error
-def detail(request, venue_id):
-    venue = get_object_or_404(Venue, pk=venus_id)
-    return render(request, 'shows/detail.html', {'venue': venue})
+# List view displays a list of objects
+class IndexView(generic.ListView):
+    template_name = 'shows/index.html'
+    context_object_name = 'latest_venue_list'
+
+    def get_queryset(self):
+        return Venue.objects.order_by('-pub_date') [:5]
+
+# Detail view displays a detail page for a particular type of object
+class DetailView(generic.DetailView):
+    model = Venue
+    template = 'shows/detail.html'
+
+class ResultsView(generic.DetailView):
+    model = Venue
+    template_name = 'shows/results.html'
 
 # Creating a view for venues
-def venue(request, venue_id):
-    return HttpResponse("Looking at the venue %s" % venue_id)
+#def venue(request, venue_id):
+  #  return HttpResponse("Looking at the venue %s" % venue_id)
 
 # Creating a view for venue responses
 def venue_results(request, venue_id):
@@ -24,11 +37,3 @@ def show(request, venue_id):
     return HttpResponse(
         "Looking at a show at venue %s" % venue_id
     )
-
-# Creating a view called index
-def index(request):
-    latest_venue_list = Venue.objects.order_by('-pub_date')[:5]
-    context = {
-        'latest_venue_list': latest_venue_list,
-    }
-    return render(request, 'shows/index.html', context)

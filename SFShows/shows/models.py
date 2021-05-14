@@ -20,5 +20,8 @@ class Venue(models.Model):
 class Show(models.Model):
     venue = models.ForeignKey(Venue, on_delete=models.CASCADE)
     info_text = models.CharField(max_length=300)
+    venue_id = Venue.objects.get(id=3) 
+    artist = models.CharField(max_length=30)
+    date = models.CharField(max_length=80)
     def __str__(self):
         return self.info_text

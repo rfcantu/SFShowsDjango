@@ -1,6 +1,12 @@
-<h1>{{ venue.venue_text }}</h1>
-<ul>
-{% for choice in venue.choice_set.all %}
-    <li>{{ choice.choice_text }}</li>
-{% endfor %}
-</ul>
+<!DOCTYPE html>
+<html>
+    <body>
+        <p>Results</p>
+        <h1>{{ venue.venue_text }}</h1>
+        <ul>
+        {% for choice in venue.choice_set.all %}
+            <li>{{ choice.choice_text }}</li>
+        {% endfor %}
+        </ul>
+    </body>
+</html>

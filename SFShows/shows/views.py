@@ -19,6 +19,11 @@ class DetailView(generic.DetailView):
     model = Venue
     template = 'shows/detail.html'
 
+class VenueDetailView(generic.DetailView):
+    model = Venue
+    show_list = Venue.objects.all()
+    template = 'shows/venue_detail.html'
+
 class ResultsView(generic.DetailView):
     model = Venue
     template_name = 'shows/results.html'

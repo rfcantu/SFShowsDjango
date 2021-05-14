@@ -39,12 +39,13 @@ def parseGreatAmericanMusicHall(url):
     found = []
     parsed = getContent(url)
     for el in parsed.find_all(class_="list-view-item"):
-        el = clean(el.get_text(), lower=False, no_line_breaks=True, no_punct=True)
+        el = clean(el.get_text(), lower=False, no_line_breaks=False, no_punct=True)
         el = el.replace("More", "")
         el = el.replace("Info", "")
-        inside = []
-        inside.append(el)
-        found.append(inside)
+        split = el.split("\n")
+        found.append(split)
+        statement = "INSERT INTO shows_show(artist, date, venue_id) VALUES ('{artist}', '{date}', 2);".format(artist = split[1], date = split[2])
+        print(statement)
     return found
 
 def main():

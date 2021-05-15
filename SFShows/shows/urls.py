@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:pk>/', views.DetailView.as_view(), name='detail'),
     path('<int:pk>/', views.VenueDetailView.as_view(), name='venue_detail'),
     path('<int:pk>/venue_results/', views.ResultsView.as_view(), name='venue_results'),
-    path('<int:venue_id>/show/', views.show, name='show'),
+    path('<int:venue_id>/show/', views.show, name='show'
+    ),
 ]

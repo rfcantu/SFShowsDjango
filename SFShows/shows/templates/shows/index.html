@@ -42,18 +42,39 @@
     </nav>
 </div>
 
-<body>
-    <div id="map-container" class="container float-left w-59">
-        <script>
-            mapboxgl.accessToken = 'pk.eyJ1IjoicmZjYW50dSIsImEiOiJja2tyaHltZjgwY25jMnFsajVxZ3hwNXc1In0.a-889nq5imuxYZ-ZFRH0cA'
-            var map = new mapboxgl.Map({
-                container: 'map-container',
-                style: 'mapbox://styles/rfcantu/cko0fqd3w02lf17pfhcj2o7ou',
-                center: [-122.414, 37.78],
-                zoom: 11
-            });
-        </script>
+<div id="map-and-side" style="height: 400px;">
+    <div class="container-fluid">
+        <div class="row h-50">
+            <div id="map-container" class="col-6 h-50">
+                <script>
+                    mapboxgl.accessToken = 'pk.eyJ1IjoicmZjYW50dSIsImEiOiJja2tyaHltZjgwY25jMnFsajVxZ3hwNXc1In0.a-889nq5imuxYZ-ZFRH0cA'
+                    var map = new mapboxgl.Map({
+                        container: 'map-container',
+                        style: 'mapbox://styles/rfcantu/cko0fqd3w02lf17pfhcj2o7ou',
+                        center: [-122.414, 37.78],
+                        zoom: 11
+                    });
+                    map.on('click', function (e) {
+                        var features = map.queryRenderedFeatures(e.point, {
+                            layers: ['san-francisco-music-venues']
+                        });
+                        if (!features.length) {
+                            return
+                        }
+                        var feature = features[0];
+                        var popup = new mapboxgl.Popup({ offset: [0, -15] })
+                            .setLngLat(feature.geometry.coordinates)
+                            .setHTML('<h3>' + feature.properties.Name + '</h3><p>' +
+                            feature.properties.Address + '</p>')
+                            .addTo(map)
+                    });
+                </script>
+            </div>
+            <div id="map-pop-up" class="col">
+                <p>HHHHHH</p>
+            </div>
+        </div>
     </div>
-</body>
+</div>
 
 </html>

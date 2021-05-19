@@ -1,9 +1,11 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import login
 from django.urls import reverse
 from django.views import generic
 
 from .models import Venue, Show
+from .forms import CustomUserCreationForm
 # Create your views here.
 
 # List view displays a list of objects
@@ -38,3 +40,17 @@ def show(request, venue_id):
     return HttpResponse(
         "Looking at a show at venue %s" % venue_id
     )
+
+# Creating a view for new users to register
+def register(request):
+    if request.method == "GET":
+        return HttpResponse(
+            request, "shows/register.html",
+            {"form": CustomUserCreationForm}
+        )
+    elif request.method == "POST":
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect(reverse("shows"))

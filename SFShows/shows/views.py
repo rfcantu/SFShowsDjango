@@ -44,7 +44,7 @@ def show(request, venue_id):
 # Creating a view for new users to register
 def register(request):
     if request.method == "GET":
-        return HttpResponse(
+        return render(
             request, "shows/register.html",
             {"form": CustomUserCreationForm}
         )

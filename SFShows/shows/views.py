@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.urls import reverse
 from django.views import generic
 
@@ -41,16 +42,42 @@ def show(request, venue_id):
         "Looking at a show at venue %s" % venue_id
     )
 
+def login(request):
+    if request.user.is_authenticated:
+        return render(request, 'shows/index.html')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('/shows')
+        else:
+            form = AuthenticationForm(request.POST)
+            return render(request, 'login.html', {'form': form})
+    else:
+        form = AuthenticationForm()
+        return render(request, 'login.html', {'form': form})
+
+def logout(request):
+    logout(request)
+    return redirect('shows/index.html')
+
 # Creating a view for new users to register
 def register(request):
-    if request.method == "GET":
-        return render(
-            request, "shows/register.html",
-            {"form": CustomUserCreationForm}
-        )
-    elif request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
+    if request.user.is_authenticated:
+        return redirect('shows/index.html')
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            form.save()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
             login(request, user)
-            return redirect(reverse("shows"))
+            return redirect('shows/index.html')
+        else:
+            return render(request, 'register.html', {'form': form})
+    else:
+        form = UserCreationForm()
+        return render(request, 'register.html', {'form': form})

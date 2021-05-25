@@ -9,6 +9,14 @@ def getContent(url):
     parsed = BeautifulSoup(page, "html.parser")
     return parsed
 
+def parse1015(url):
+    found = []
+    parsed = getContent(url)
+    for el in parsed.find_all(class_="single-event"):
+        el = clean(el.get_text(), lower=False, no_line_breaks=True)
+        print (el)
+    return found
+
 def parseTheFillmore(url):
     found = []
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -42,21 +50,22 @@ def parseGreatAmericanMusicHall(url):
         el = clean(el.get_text(), lower=False, no_line_breaks=False, no_punct=True)
         el = el.replace("More", "")
         el = el.replace("Info", "")
-        split = el.split("\n")
+        split = set(el.split("\n"))
         found.append(split)
-        statement = "INSERT INTO shows_show(artist, date, venue_id) VALUES ('{artist}', '{date}', 2);".format(artist = split[1], date = split[2])
+        statement = "INSERT INTO shows_show(artist, date, venue_id) VALUES ('{artist}', '{date}', 2);".format(artist = list(split)[1], date = list(split)[2])
         print(statement)
     return found
 
 def main():
     all_parsed = []
-    x = 0
-    url = "https://thefillmore.com/calendar/"
-    all_parsed.append(parseTheFillmore(url))
+    #url = "https://thefillmore.com/calendar/"
+    #all_parsed.append(parseTheFillmore(url))
     # url = "http://www.bottomofthehill.com/calendar.html#sthash.SjLaNJKm.dpbs"
     # all_parsed.append(parseBottomOfTheHill(url))
-    url = "https://slimspresents.com/great-american-music-hall/"
-    all_parsed.append(parseGreatAmericanMusicHall(url))
+    #url = "https://slimspresents.com/great-american-music-hall/"
+    #all_parsed.append(parseGreatAmericanMusicHall(url))
+    url = "http://1015.com/calendar/"
+    all_parsed.append(parse1015(url))
     #for i in all_parsed:
      #   print(i)
 main()

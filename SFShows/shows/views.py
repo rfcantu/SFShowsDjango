@@ -42,7 +42,7 @@ def show(request, venue_id):
         "Looking at a show at venue %s" % venue_id
     )
 
-def login(request):
+def user_login(request):
     if request.user.is_authenticated:
         return render(request, 'shows/index.html')
     if request.method == 'POST':
@@ -66,16 +66,16 @@ def logout(request):
 # Creating a view for new users to register
 def register(request):
     if request.user.is_authenticated:
-        return redirect('shows/index.html')
+        return redirect('/shows')
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=username, password=password)
             login(request, user)
-            return redirect('index')
+            return redirect('/shows')
         else:
             return render(request, 'register.html', {'form': form})
     else:

@@ -51,7 +51,7 @@ def login(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('/shows')
+            return redirect('index')
         else:
             form = AuthenticationForm(request.POST)
             return render(request, 'login.html', {'form': form})
@@ -75,7 +75,7 @@ def register(request):
             password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=password)
             login(request, user)
-            return redirect('shows/index.html')
+            return redirect('index')
         else:
             return render(request, 'register.html', {'form': form})
     else:

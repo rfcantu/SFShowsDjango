@@ -131,5 +131,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
-LOGIN_REDIRECT_URL = 'shows'
-LOGOUT_REDIRECT_URL = 'shows'
+LOGIN_REDIRECT_URL = '/shows'
+LOGOUT_REDIRECT_URL = '/shows'

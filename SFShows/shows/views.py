@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as user_login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.urls import reverse
 from django.views import generic
@@ -42,7 +43,7 @@ def show(request, venue_id):
         "Looking at a show at venue %s" % venue_id
     )
 
-def user_login(request):
+def login(request):
     if request.user.is_authenticated:
         return render(request, 'shows/index.html')
     if request.method == 'POST':
@@ -50,7 +51,7 @@ def user_login(request):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
+            user_login(request, user)
             return redirect('index')
         else:
             form = AuthenticationForm(request.POST)
@@ -74,7 +75,7 @@ def register(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password1')
             user = authenticate(request, username=username, password=password)
-            login(request, user)
+            user_login(request, user)
             return redirect('/shows')
         else:
             return render(request, 'register.html', {'form': form})

@@ -32,6 +32,9 @@ class ResultsView(generic.DetailView):
     model = Venue
     template_name = 'shows/results.html'
 
+class UserView(generic.DetailView):
+    template = 'shows/user_home.html'
+
 # Creating a view for venue responses
 def venue_results(request, venue_id):
     response = "Looking at results for venur %s"

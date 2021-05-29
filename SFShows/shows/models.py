@@ -25,3 +25,10 @@ class Show(models.Model):
     date = models.CharField(max_length=80)
     def __str__(self):
         return self.info_text
+
+class Attending(models.Model):
+    show = models.ForeignKey(Show, on_delete=models.CASCADE)
+    attendee = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.attendee
